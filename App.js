@@ -4,6 +4,8 @@ import { StyleSheet, Text, View } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import MainStack from "./Stacks/MainStack";
 import { useFonts } from "expo-font";
+import Register from "./Screens/Register";
+import AuthStack from "./Stacks/AuthStack";
 
 export default function App() {
  
@@ -20,7 +22,9 @@ export default function App() {
   } else {
     return (
       <NavigationContainer>
-        <MainStack />
+        {/* <MainStack /> */}
+        <AuthStack />
+        {/* <Register /> */}
       </NavigationContainer>
     );
   }
