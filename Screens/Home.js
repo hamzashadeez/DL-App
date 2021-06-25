@@ -4,7 +4,7 @@ import Box from "../Components/Box";
 import HomeHeader from "../Components/HomeHeader";
 import { db } from "../Configs/firebase";
 
-const Home = () => {
+const Home = ({navigation}) => {
   const [books, setBooks] = useState([]);
   useEffect(() => {
     db.collection("Stories").onSnapshot((shot) => {
@@ -31,7 +31,7 @@ const Home = () => {
             horizontal
           >
             {books.map((book) => (
-              <Box key={book.id} book={book.data} />
+              <Box navigation={navigation} key={book.id} book={book.data} />
             ))}
           </ScrollView>
         </View>
@@ -46,7 +46,7 @@ const Home = () => {
           >
             {books.map((book) => {
               if (book.data.category === "soyayyah") {
-                return <Box key={book.id} book={book.data} />;
+                return <Box navigation={navigation} key={book.id} book={book.data} />;
               }
             })}
           </ScrollView>
@@ -62,7 +62,7 @@ const Home = () => {
           >
             {books.map((book) => {
               if (book.data.category === "rayuwa") {
-                return <Box key={book.id} book={book.data} />;
+                return <Box navigation={navigation} key={book.id} book={book.data} />;
               }
             })}
           </ScrollView>
@@ -79,7 +79,7 @@ const Home = () => {
             horizontal
           >
             {books.map((book) => (
-              <Box key={book.id} book={book.data} />
+              <Box navigation={navigation} key={book.id} book={book.data} />
             ))}
           </ScrollView>
         </View>

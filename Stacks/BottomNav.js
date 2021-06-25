@@ -3,6 +3,7 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import Home from "../Screens/Home";
 import Profile from "../Screens/Profile";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
+import HomeStack from "./HomeStack";
 
 const Tab = createBottomTabNavigator();
 
@@ -21,7 +22,7 @@ const BottomNav = () => {
     <Tab.Navigator tabBarOptions={tabBarOptions}>
       <Tab.Screen
         name="Home"
-        component={Home}
+        component={HomeStack}
         options={{
           tabBarLabel: "Home",
           tabBarIcon: ({ color, size }) => (

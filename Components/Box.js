@@ -1,12 +1,10 @@
 import React, { useEffect } from "react";
-import { ImageBackground, StyleSheet, Text, View } from "react-native";
+import { ImageBackground, Pressable, StyleSheet, Text, View } from "react-native";
 
-const Box = ({ book }) => {
-  useEffect(() => {
-    console.log(book);
-  }, []);
+const Box = ({ book, navigation }) => {
+  
   return (
-    <View style={styles.box}>
+    <Pressable style={styles.box} onPress={()=>navigation.navigate("Detail", {data:book})}>
       <ImageBackground
         resizeMode="cover"
         style={styles.bg}
@@ -14,7 +12,7 @@ const Box = ({ book }) => {
       >
         <Text style={{ fontFamily: "lato", color: "#fff" }}>{book?.title}</Text>
       </ImageBackground>
-    </View>
+    </Pressable>
   );
 };
 
