@@ -2,40 +2,30 @@ import { StatusBar } from "expo-status-bar";
 import React, { useEffect, useState, useContext } from "react";
 import { StyleSheet, Text, View } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
-import MainStack from "./Stacks/MainStack";
+
 import { useFonts } from "expo-font";
-import AuthStack from "./Stacks/AuthStack";
-import firebase from "firebase";
+
 import { UserProvider, UserContext } from "./Configs/UserContext";
-import {Data} from './Configs/Context'
-import Flash from "./Screens/Flash";
+import { Data } from "./Configs/Context";
+
+import {
+  RecoilRoot,
+  atom,
+  selector,
+  useRecoilState,
+  useRecoilValue,
+} from "recoil";
+
+import { userState } from "./Recoil/Atoms";
+import AppStack from "./Stacks/AppStack";
 
 export default function App() {
   const [state, setState] = useContext(UserContext);
+  // const [text, setText] = useRecoilState(userState);
   const [signed, setSigned] = useState(null);
   let [fontsLoaded] = useFonts({
     Lato: require("./assets/fonts/Lato-Bold.ttf"),
   });
-
-
-  useEffect(() => {
-    firebase.auth().onAuthStateChanged((user) => {
-      if (user) {
-        // User is signed in, see docs for a list of available properties
-        // https://firebase.google.com/docs/reference/js/firebase.User
-        var uid = user.uid;
-        setSigned(user)
-        console.log(user + " is here "+ user.email )
-        console.log(state)
-        // ...
-      } else {
-        // User is signed out
-        // ...
-        setSigned(false)
-        console.log("No user here")
-      }
-    });
-  }, []);
 
   if (!fontsLoaded) {
     return (
@@ -45,11 +35,12 @@ export default function App() {
     );
   } else {
     return (
-      <Data.Provider value={signed}>
+      <RecoilRoot>
         <NavigationContainer>
-          {signed === null ? <Flash /> : signed === false ? <AuthStack /> : <MainStack />}
+          <AppStack />
+          {/* {signed === null ? <Flash /> : signed === false ? <AuthStack /> : <MainStack />} */}
         </NavigationContainer>
-      </Data.Provider>
+      </RecoilRoot>
     );
   }
 }

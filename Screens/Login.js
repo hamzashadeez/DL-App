@@ -10,20 +10,25 @@ import {
 } from "react-native";
 import firebase from "firebase";
 import { auth, db } from "../Configs/firebase";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 
+import {
+  useRecoilState,
+  useRecoilValue,
+} from "recoil";
+import { userState } from "../Recoil/Atoms";
 
 const Login = ({ navigation }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
+  const [user, setUser] = useRecoilState(userState);
 
   const logMeIn = ()=>{
       setLoading(!loading)
       firebase.auth().signInWithEmailAndPassword(email, password)
         .then(userData=>{
             db.collection("Users").doc(email).get().then(user=>{
-                AsyncStorage.setItem("user_data", JSON.stringify(user.data()));
+                setUser(user.data())
             })
         }).catch((e)=>{
             alert( e.message);

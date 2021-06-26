@@ -10,7 +10,8 @@ import {
 } from "react-native";
 import firebase from "firebase";
 import { auth, db } from "../Configs/firebase";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import {userState} from '../Recoil/Atoms'
+import { useRecoilState, useRecoilValue } from "recoil";  
 
 const Register = ({ navigation }) => {
   const [email, setEmail] = useState("");
@@ -18,14 +19,7 @@ const Register = ({ navigation }) => {
   const [password, setPassword] = useState("");
   const [username, setUsername] = useState("");
   const [loading, setLoading] = useState(false);
-
-  const storeData = async (value) => {
-    try {
-      await AsyncStorage.setItem("user_data", value);
-    } catch (e) {
-      // saving error
-    }
-  };
+  const [user, setUser] = useRecoilState(userState);
 
   const signUp = () => {
     setLoading(!loading);
@@ -40,12 +34,14 @@ const Register = ({ navigation }) => {
           email,
           password,
           phone,
-          coins: 0,
+          coins: 20,
           books: [],
         };
-        db.collection("Users").doc(email).set({ userData });
+        db.collection("Users").doc(email).set({ userData }).then(()=>{
+          setUser(userData)
+        })
         // ...
-        AsyncStorage.setItem("user_data", userData);
+       
       })
       .catch((error) => {
         var errorCode = error.code;

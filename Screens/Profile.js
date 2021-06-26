@@ -10,30 +10,13 @@ import {
 import firebase from "firebase";
 import { Data } from "../Configs/Context";
 import { MaterialCommunityIcons, FontAwesome5 } from "@expo/vector-icons";
-import { db } from "../Configs/firebase";
+import { useRecoilState, useRecoilValue } from "recoil";
+import {userState} from '../Recoil/Atoms';
 
 const Profile = () => {
-  const [user_data, setUser] = useState({});
+  const [user, setUser] = useRecoilState(userState);
   const [loading, setLoading] = useState(false);
   const [show, setShow] = useState(false);
-  const getData = async (email) => {
-    await db
-      .collection("Users")
-      .doc(email)
-      .get()
-      .then((userx) => {
-        setUser(userx.data());
-        console.log(user_data);
-      });
-  };
-  useEffect(() => {
-    firebase.auth().onAuthStateChanged((user) => {
-      if (user) {
-        getData(user.email);
-      } else {
-      }
-    });
-  }, []);
 
   //   const {} = useContext(Data);
   const logout = async () => {
@@ -43,6 +26,7 @@ const Profile = () => {
         .auth()
         .signOut()
         .then(() => {
+          setUser(false)
           console.log("Signed Out ");
         });
     }, 2000);
@@ -66,10 +50,10 @@ const Profile = () => {
           color="#2e4850"
         />
         <View style={{marginLeft: 12}}>
-        <Text style={styles.username}>Hamza Shadee</Text>
-        <Text style={styles.label}>hamza@gmail.com</Text>
-        <Text style={styles.label}>0932332390</Text>
-        <Text style={styles.coinText}>Coins: 50</Text>
+        <Text style={styles.username}>{user.username}</Text>
+        <Text style={styles.label}>{user.email}</Text>
+        <Text style={styles.label}>{user.phone}</Text>
+        <Text style={styles.coinText}>Coins: {user.coins}</Text>
 
         </View>
       </View>

@@ -3,10 +3,14 @@ import { ScrollView, StyleSheet, Text, View } from "react-native";
 import Box from "../Components/Box";
 import HomeHeader from "../Components/HomeHeader";
 import { db } from "../Configs/firebase";
+import {userState} from '../Recoil/Atoms'
+import { useRecoilState, useRecoilValue } from "recoil";
 
 const Home = ({navigation}) => {
   const [books, setBooks] = useState([]);
+  const [user, setUser] = useRecoilState(userState);
   useEffect(() => {
+    console.log(user.phone)
     db.collection("Stories").onSnapshot((shot) => {
       setBooks(
         shot.docs.map((doc) => ({
