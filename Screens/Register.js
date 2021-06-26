@@ -1,13 +1,59 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   StyleSheet,
   Text,
   View,
   TextInput,
   TouchableOpacity,
+  ActivityIndicator,
+  Alert,
 } from "react-native";
+import firebase from "firebase";
+import { auth, db } from "../Configs/firebase";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
-const Register = ({navigation}) => {
+const Register = ({ navigation }) => {
+  const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
+  const [password, setPassword] = useState("");
+  const [username, setUsername] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  const storeData = async (value) => {
+    try {
+      await AsyncStorage.setItem("user_data", value);
+    } catch (e) {
+      // saving error
+    }
+  };
+
+  const signUp = () => {
+    setLoading(!loading);
+
+    firebase
+      .auth()
+      .createUserWithEmailAndPassword(email, password)
+      .then((userCredential) => {
+        // Signed in
+        var userData = {
+          username,
+          email,
+          password,
+          phone,
+          coins: 0,
+          books: [],
+        };
+        db.collection("Users").doc(email).set({ userData });
+        // ...
+        AsyncStorage.setItem("user_data", userData);
+      })
+      .catch((error) => {
+        var errorCode = error.code;
+        var errorMessage = error.message;
+        Alert("Error", errorMessage);
+        // ..
+      });
+  };
   return (
     <View style={{ flex: 1, padding: 15, backgroundColor: "#2e4850" }}>
       <Text
@@ -36,24 +82,42 @@ const Register = ({navigation}) => {
           style={styles.input}
           placeholderTextColor="#2e4850"
           placeholder="Email Address"
+          keyboardType="email-address"
+          value={email}
+          onChangeText={(e) => setEmail(e)}
         />
         <TextInput
           style={styles.input}
           placeholderTextColor="#2e4850"
           placeholder="Phone e.g: 080xxxxxxxx"
+          keyboardType="numeric"
+          value={phone}
+          onChangeText={(e) => setPhone(e)}
         />
         <TextInput
           style={styles.input}
           placeholderTextColor="#2e4850"
           placeholder="Username e.g Yusuf11212"
+          value={username}
+          onChangeText={(e) => setUsername(e)}
         />
         <TextInput
           style={styles.input}
           placeholderTextColor="#2e4850"
           placeholder="Password"
+          keyboardType="visible-password"
+          secureTextEntry={true}
+          value={password}
+          onChangeText={(e) => setPassword(e)}
         />
-        <TouchableOpacity style={styles.btn}>
-          <Text style={{ fontFamily: "Lato", color: "#fff" }}>Register</Text>
+        <TouchableOpacity style={styles.btn} onPress={() => signUp()}>
+          {loading ? (
+            <ActivityIndicator color="#fff" size={20} />
+          ) : (
+            <Text style={{ fontFamily: "Lato", fontSize: 16, color: "#fff" }}>
+              Register
+            </Text>
+          )}
         </TouchableOpacity>
         <View
           style={{
@@ -66,7 +130,10 @@ const Register = ({navigation}) => {
           <Text style={{ fontFamily: "Lato", fontSize: 16, color: "#eee" }}>
             kanada account?
           </Text>
-          <TouchableOpacity style={{ marginLeft: 10 }} onPress={()=>navigation.navigate("Login")}>
+          <TouchableOpacity
+            style={{ marginLeft: 10 }}
+            onPress={() => navigation.navigate("Login")}
+          >
             <Text
               style={{ fontFamily: "Lato", fontSize: 16, color: "#547c84" }}
             >

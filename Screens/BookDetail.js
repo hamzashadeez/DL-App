@@ -33,7 +33,7 @@ const BookDetail = ({ navigation, route }) => {
             fontSize: 35,
             fontFamily: "Lato",
             color: "#555",
-            marginLeft: 180,
+            marginLeft: 150,
             marginTop: 30,
           }}
         >
