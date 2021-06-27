@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import {
   ImageBackground,
   StyleSheet,
@@ -20,6 +20,7 @@ import { userState } from "../Recoil/Atoms";
 const BookDetail = ({ navigation, route }) => {
   const { data } = route.params;
   const [user, setUser] = useRecoilState(userState);
+  const [showWarning, setWarning] = useState(false);
 
   useEffect(() => {
     console.log(data);
@@ -35,7 +36,7 @@ const BookDetail = ({ navigation, route }) => {
     });
     if (exist !== false) {
       console.log("already exist");
-      navigation.navigate("Chapters", {data})
+      navigation.navigate("Chapters", { data });
     } else {
       if (user.coins >= 20) {
         db.collection("Users")
@@ -53,12 +54,15 @@ const BookDetail = ({ navigation, route }) => {
                 setUser(user.data());
               });
             console.log("Book added");
-            navigation.navigate("Chapters", {data})
+            setWarning(true);
+            navigation.navigate("Chapters", { data });
           })
           .catch((e) => console.log(e.message));
-      }else{
-        alert("Baka da wadataccen Coins da raka bude wannan labari")
-        console.log("No Enough Coins Baka da wadataccen Coins da raka bude wannan")
+      } else {
+        alert("Baka da wadataccen Coins da raka bude wannan labari");
+        console.log(
+          "No Enough Coins Baka da wadataccen Coins da raka bude wannan"
+        );
       }
     }
     console.log(user);
@@ -130,7 +134,10 @@ const BookDetail = ({ navigation, route }) => {
             }}
           >
             Price:{" "}
-            <Text style={{ color: "#2e4850", fontWeight: "bold" }}> 20 Coins</Text>
+            <Text style={{ color: "#2e4850", fontWeight: "bold" }}>
+              {" "}
+              20 Coins
+            </Text>
           </Text>
         </View>
         {/* Start Reading */}
@@ -144,6 +151,14 @@ const BookDetail = ({ navigation, route }) => {
             Start Reading
           </Text>
         </Pressable>
+        {showWarning ? (
+          <Text style={styles.warning}>
+            Za'a fidda Coins 20 daga cikin Coins dinka domin karanta wannan
+            labari
+          </Text>
+        ) : (
+          <Text></Text>
+        )}
       </ScrollView>
     </View>
   );
@@ -182,5 +197,12 @@ const styles = StyleSheet.create({
     padding: 10,
     marginTop: 10,
     borderRadius: 4,
+  },
+  warning: {
+    fontFamily: "Lato",
+    fontSize: 11,
+    color: "dodgerblue",
+    marginTop: 10,
+    marginHorizontal: 15,
   },
 });

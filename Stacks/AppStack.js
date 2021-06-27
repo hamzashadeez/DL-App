@@ -19,10 +19,10 @@ const AppStack = () => {
         db.collection("Users")
           .doc(userData.email)
           .get()
-          .then((user) => {
-            setUser(user.data());
+          .then((user1) => {
+            setUser(user1.data());
           });
-        console.log("Found a user: " + userData.email);
+        console.log("Found a user: " + user);
       } else {
         console.log("No user here");
         setUser(false);

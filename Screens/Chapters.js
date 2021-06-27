@@ -57,7 +57,7 @@ const Chapters = ({ navigation, route }) => {
         >
           CHAPTERS
         </Text>
-        {data.chapters.map(d=><ChapterListItem key={d.title} title={d.title} />)}
+        {data.chapters.map(d=><ChapterListItem navigation={navigation} data={data} key={d.title} title={d.title} />)}
       </ScrollView>
     </View>
   );
@@ -67,10 +67,11 @@ export default Chapters;
 
 const styles = StyleSheet.create({
   banner: {
-    width: "100%",
+    // width: "100%",
     height: 150,
     padding: 10,
     zIndex: -1,
+    position: 'relative'
   },
   overlay: {
     position: "absolute",

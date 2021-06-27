@@ -5,6 +5,7 @@ import Home from "../Screens/Home";
 import BookDetail from "../Screens/BookDetail";
 import NoNetwork from "../Screens/NoNetwork";
 import Chapters from "../Screens/Chapters";
+import Chat from "../Screens/Chat";
 
 const Stack = createStackNavigator();
 
@@ -14,6 +15,7 @@ const HomeStack = () => {
       <Stack.Screen name="Home" component={Home} />
       <Stack.Screen name="Detail" component={BookDetail} />
       <Stack.Screen name="Chapters" component={Chapters} />
+      <Stack.Screen name="Chat" component={Chat} />
       <Stack.Screen name="No Network" component={NoNetwork} />
     </Stack.Navigator>
   );

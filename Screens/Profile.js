@@ -17,6 +17,7 @@ const Profile = () => {
   const [user, setUser] = useRecoilState(userState);
   const [loading, setLoading] = useState(false);
   const [show, setShow] = useState(false);
+  console.log(user)
 
   //   const {} = useContext(Data);
   const logout = async () => {
@@ -50,7 +51,7 @@ const Profile = () => {
           color="#2e4850"
         />
         <View style={{marginLeft: 12}}>
-        <Text style={styles.username}>{user.username}</Text>
+        <Text style={styles.username}>{user?.username}</Text>
         <Text style={styles.label}>{user.email}</Text>
         <Text style={styles.label}>{user.phone}</Text>
         <Text style={styles.coinText}>Coins: {user.coins}</Text>
