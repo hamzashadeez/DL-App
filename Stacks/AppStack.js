@@ -20,7 +20,7 @@ const AppStack = () => {
           .doc(userData.email)
           .get()
           .then((user) => {
-            setUser(user.data()?.["userData"]);
+            setUser(user.data());
           });
         console.log("Found a user: " + userData.email);
       } else {

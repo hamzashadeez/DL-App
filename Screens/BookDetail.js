@@ -8,15 +8,62 @@ import {
   Image,
   ScrollView,
   Pressable,
+  Alert,
 } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { db } from "../Configs/firebase";
+import firebase from "firebase";
+
+import { useRecoilState } from "recoil";
+import { userState } from "../Recoil/Atoms";
 
 const BookDetail = ({ navigation, route }) => {
   const { data } = route.params;
+  const [user, setUser] = useRecoilState(userState);
 
   useEffect(() => {
     console.log(data);
   }, []);
+
+  const addBook = async () => {
+    let exist = false;
+    const bookExist = user.books;
+    bookExist.map((b) => {
+      if (b.id === data.id) {
+        exist = true;
+      }
+    });
+    if (exist !== false) {
+      console.log("already exist");
+      navigation.navigate("Chapters", {data})
+    } else {
+      if (user.coins >= 20) {
+        db.collection("Users")
+          .doc(user.email)
+          .update({
+            books: firebase.firestore.FieldValue.arrayUnion(data),
+            coins: firebase.firestore.FieldValue.increment(parseInt(-20)),
+          })
+          .then(() => {
+            // setUser(user=> {b})
+            db.collection("Users")
+              .doc(user.email)
+              .get()
+              .then((user) => {
+                setUser(user.data());
+              });
+            console.log("Book added");
+            navigation.navigate("Chapters", {data})
+          })
+          .catch((e) => console.log(e.message));
+      }else{
+        alert("Baka da wadataccen Coins da raka bude wannan labari")
+        console.log("No Enough Coins Baka da wadataccen Coins da raka bude wannan")
+      }
+    }
+    console.log(user);
+    console.log(bookExist);
+  };
 
   return (
     <View style={styles.screen}>
@@ -83,11 +130,11 @@ const BookDetail = ({ navigation, route }) => {
             }}
           >
             Price:{" "}
-            <Text style={{ color: "#2e4850", fontWeight: "bold" }}> Free</Text>
+            <Text style={{ color: "#2e4850", fontWeight: "bold" }}> 20 Coins</Text>
           </Text>
         </View>
         {/* Start Reading */}
-        <Pressable style={styles.start}>
+        <Pressable style={styles.start} onPress={() => addBook()}>
           <MaterialCommunityIcons
             name="book-open-page-variant"
             color="#fff"

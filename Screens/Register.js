@@ -37,7 +37,7 @@ const Register = ({ navigation }) => {
           coins: 20,
           books: [],
         };
-        db.collection("Users").doc(email).set({ userData }).then(()=>{
+        db.collection("Users").doc(email).set( userData ).then(()=>{
           setUser(userData)
         })
         // ...
