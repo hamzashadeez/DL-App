@@ -42,7 +42,7 @@ const styles = StyleSheet.create({
     },
     main:{
         padding: 10,
-        maxWidth: 230,
+        maxWidth: 200,
         borderRadius: 5,
         alignSelf:'flex-start',
         elevation: 4,

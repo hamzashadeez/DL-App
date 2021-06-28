@@ -81,7 +81,7 @@ const BookDetail = ({ navigation, route }) => {
         </TouchableOpacity>
         <Text
           style={{
-            fontSize: 35,
+            fontSize: 30,
             fontFamily: "Lato",
             color: "#555",
             marginLeft: 150,
@@ -172,7 +172,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
   },
   banner: {
-    height: 200,
+    height: 150,
     alignItems: "flex-start",
     justifyContent: "flex-start",
     padding: 15,
