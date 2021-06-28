@@ -31,7 +31,7 @@ const styles = StyleSheet.create({
   bg: {
     flex: 1,
     width: "100%",
-    // borderRadius: 10,
+    borderRadius: 10,
     paddingBottom: 10,
     alignItems: "center",
     justifyContent: "flex-end",

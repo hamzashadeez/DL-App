@@ -2,8 +2,9 @@ import React from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import Home from "../Screens/Home";
 import Profile from "../Screens/Profile";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { MaterialCommunityIcons, FontAwesome5 } from "@expo/vector-icons";
 import HomeStack from "./HomeStack";
+import Coins from "../Screens/Coins";
 
 const Tab = createBottomTabNavigator();
 
@@ -30,6 +31,13 @@ const BottomNav = () => {
           ),
         }}
       />
+      <Tab.Screen name="Coins" component={Coins}
+        options={{
+          tabBarLabel: "Coins",
+          tabBarIcon: ({ color, size }) => (
+            <FontAwesome5 name="coins"  color={color} size={20} />
+          ),
+        }}/>
       <Tab.Screen name="Profile" component={Profile}
         options={{
           tabBarLabel: "Profile",

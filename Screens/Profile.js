@@ -171,7 +171,7 @@ export default Profile;
 
 const styles = StyleSheet.create({
   coinBanner: {
-    backgroundColor: "dodgerblue",
+    backgroundColor: "#2e4850",
     flexDirection: "row",
     paddingVertical: 15,
     paddingHorizontal: 20,
