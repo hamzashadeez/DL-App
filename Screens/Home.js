@@ -1,16 +1,38 @@
 import React, { useEffect, useState } from "react";
-import { ScrollView, StyleSheet, Text, View } from "react-native";
+import { ScrollView, StyleSheet, Text, View, BackHandler, Alert} from "react-native";
 import Box from "../Components/Box";
 import HomeHeader from "../Components/HomeHeader";
 import { db } from "../Configs/firebase";
-import {userState} from '../Recoil/Atoms'
+import { userState } from "../Recoil/Atoms";
+import { Player } from "../Recoil/Play";
 import { useRecoilState, useRecoilValue } from "recoil";
 
-const Home = ({navigation}) => {
+const Home = ({ navigation }) => {
   const [books, setBooks] = useState([]);
   const [user, setUser] = useRecoilState(userState);
+  const [playerState, setPlayer] = useRecoilState(Player);
+
+    const backAction = () => {
+      Alert.alert('Close Application?', 'Are you sure you want to go close?', [
+        {
+          text: 'Cancel',
+          onPress: () => null,
+          style: 'cancel',
+        },
+        { text: 'YES', onPress: () => BackHandler.exitApp() },
+      ]);
+      return true;
+    };
+
+    const backHandler = BackHandler.addEventListener('hardwareBackPress', backAction);
+
+
   useEffect(() => {
-    console.log(user)
+   
+      setPlayer(!playerState);
+    
+
+    console.log(playerState);
     db.collection("Stories").onSnapshot((shot) => {
       setBooks(
         shot.docs.map((doc) => ({
@@ -50,7 +72,9 @@ const Home = ({navigation}) => {
           >
             {books.map((book) => {
               if (book.data.category === "soyayyah") {
-                return <Box navigation={navigation} key={book.id} book={book.data} />;
+                return (
+                  <Box navigation={navigation} key={book.id} book={book.data} />
+                );
               }
             })}
           </ScrollView>
@@ -66,7 +90,9 @@ const Home = ({navigation}) => {
           >
             {books.map((book) => {
               if (book.data.category === "rayuwa") {
-                return <Box navigation={navigation} key={book.id} book={book.data} />;
+                return (
+                  <Box navigation={navigation} key={book.id} book={book.data} />
+                );
               }
             })}
           </ScrollView>

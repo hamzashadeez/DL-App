@@ -6,6 +6,7 @@ import {
   View,
   ActivityIndicator,
   TouchableOpacity,
+  BackHandler
 } from "react-native";
 import firebase from "firebase";
 import { Data } from "../Configs/Context";
@@ -13,7 +14,7 @@ import { MaterialCommunityIcons, FontAwesome5 } from "@expo/vector-icons";
 import { useRecoilState, useRecoilValue } from "recoil";
 import {userState} from '../Recoil/Atoms';
 
-const Profile = () => {
+const Profile = ({navigation}) => {
   const [user, setUser] = useRecoilState(userState);
   const [loading, setLoading] = useState(false);
   const [show, setShow] = useState(false);
@@ -31,7 +32,16 @@ const Profile = () => {
           console.log("Signed Out ");
         });
     }, 2000);
+    
   };
+
+  const backAction = () => {
+     navigation.navigate("Home")
+    return true;
+  };
+
+  const backHandler = BackHandler.addEventListener('hardwareBackPress', backAction);
+
   return (
     <View
       style={{

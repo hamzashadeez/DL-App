@@ -9,6 +9,7 @@ import {
   ScrollView,
   Pressable,
   Alert,
+  BackHandler
 } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { db } from "../Configs/firebase";
@@ -25,6 +26,16 @@ const BookDetail = ({ navigation, route }) => {
   useEffect(() => {
     console.log(data);
   }, []);
+
+  const backAction = () => {
+    navigation.goBack();
+    return true;
+  };
+
+  const backHandler = BackHandler.addEventListener(
+    "hardwareBackPress",
+    backAction
+  );
 
   const addBook = async () => {
     let exist = false;
@@ -76,7 +87,7 @@ const BookDetail = ({ navigation, route }) => {
         source={require("../assets/dl.jpg")}
         style={styles.banner}
       >
-        <TouchableOpacity onPress={() => navigation.goBack()}>
+        <TouchableOpacity style={{marginTop: 12}} onPress={() => navigation.goBack()}>
           <MaterialCommunityIcons name="arrow-left" color="#fff" size={30} />
         </TouchableOpacity>
         <Text
@@ -119,7 +130,7 @@ const BookDetail = ({ navigation, route }) => {
               width: "90%",
               marginLeft: "5%",
               fontSize: 15,
-              fontFamily: "lato",
+              fontFamily: "Lato",
               color: "#222",
             }}
           >

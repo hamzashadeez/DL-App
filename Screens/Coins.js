@@ -1,11 +1,19 @@
 import React from "react";
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { StyleSheet, Text, TouchableOpacity, View, BackHandler } from "react-native";
 import {  FontAwesome5 } from "@expo/vector-icons";
 import { useRecoilState, useRecoilValue } from "recoil";
 import {userState} from '../Recoil/Atoms'
 
-const Coins = () => {
+const Coins = ({navigation}) => {
     const [user, setUser] = useRecoilState(userState);
+
+    const backAction = () => {
+      navigation.navigate("Home")
+      return true;
+    };
+
+    const backHandler = BackHandler.addEventListener('hardwareBackPress', backAction);
+
   return (
     <View style={styles.screen}>
       <View style={styles.header}>

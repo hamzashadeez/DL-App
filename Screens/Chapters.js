@@ -5,13 +5,24 @@ import {
   Text,
   View,
   TouchableOpacity,
-  ScrollView
+  ScrollView,
+  BackHandler,
 } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import ChapterListItem from "../Components/ChapterListItem";
 
 const Chapters = ({ navigation, route }) => {
-    const { data } = route.params;
+  const { data } = route.params;
+
+  const backAction = () => {
+    navigation.goBack();
+    return true;
+  };
+
+  const backHandler = BackHandler.addEventListener(
+    "hardwareBackPress",
+    backAction
+  );
   return (
     <View style={styles.screen}>
       <ImageBackground
@@ -24,7 +35,7 @@ const Chapters = ({ navigation, route }) => {
           style={{ zIndex: 40 }}
           onPress={() => navigation.goBack()}
         >
-          <MaterialCommunityIcons name="arrow-left" color="#fff" size={30} />
+          <MaterialCommunityIcons name="arrow-left" color="#fff" size={30}  style={{marginTop: 22, marginBottom: 0}}/>
         </TouchableOpacity>
         <View
           style={{
@@ -40,6 +51,7 @@ const Chapters = ({ navigation, route }) => {
               fontFamily: "Lato",
               color: "#fff",
               zIndex: 4,
+              marginTop: -10
             }}
           >
             {data.title}
@@ -57,7 +69,14 @@ const Chapters = ({ navigation, route }) => {
         >
           CHAPTERS
         </Text>
-        {data.chapters.map(d=><ChapterListItem navigation={navigation} data={data} key={d.title} title={d.title} />)}
+        {data.chapters.map((d) => (
+          <ChapterListItem
+            navigation={navigation}
+            data={data}
+            key={d.title}
+            title={d.title}
+          />
+        ))}
       </ScrollView>
     </View>
   );
@@ -68,15 +87,15 @@ export default Chapters;
 const styles = StyleSheet.create({
   banner: {
     // width: "100%",
-    height: 150,
+    height: 120,
     padding: 10,
     zIndex: -1,
-    position: 'relative'
+    position: "relative",
   },
   overlay: {
     position: "absolute",
     width: "100%",
-    height: 150,
+    height: 120,
     top: 0,
     left: 0,
     backgroundColor: "#000",

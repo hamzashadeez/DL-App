@@ -15,7 +15,7 @@ const HomeStack = () => {
       <Stack.Screen name="Home" component={Home} />
       <Stack.Screen name="Detail" component={BookDetail} />
       <Stack.Screen name="Chapters" component={Chapters} />
-      <Stack.Screen name="Chat" component={Chat} />
+      {/* <Stack.Screen name="Chat" component={Chat} /> */}
       <Stack.Screen name="No Network" component={NoNetwork} />
     </Stack.Navigator>
   );

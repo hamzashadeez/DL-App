@@ -6,10 +6,16 @@ import {
   View,
   TouchableOpacity,
   ScrollView,
+  BackHandler,
+  Alert,
+  ToastAndroid,
 } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { Second, First } from "../Components/Message";
-import { set } from "react-native-reanimated";
+import { Audio } from "expo-av";
+import { Player } from "../Recoil/Play";
+import { useIsFocused } from "@react-navigation/native";
+import { useRecoilState, useRecoilValue } from "recoil";
 
 const Chat = ({ navigation, route }) => {
   const { data, title } = route.params;
@@ -19,30 +25,59 @@ const Chat = ({ navigation, route }) => {
   const [messages, setMessages] = useState([]);
   const [playing, setPlayer] = useState(true);
   const [index, setIndex] = useState(0);
+  const [sound, setSound] = React.useState();
+  const isFocused = useIsFocused();
+  const [playingState, setPlayingState] = useRecoilState(Player);
 
   const [chat, setChat] = useState([]);
 
-  const soundClick = ()=>{
-    // Play sound here
-    // change Icon here
-    setPlayer(!playing)
-  }
+  const soundClick = async () => {
+    setPlayingState(!playingState);
+    setPlayer(!playing);
+    if (playingState) {
+      sound.pauseAsync();
+    } else {
+      sound.stopAsync();
+      sound.playAsync();
+    }
+  };
 
-  const resetStory = ()=>{
+  const setAudio = async () => {
+    if (playingState === true) {
+      console.log("Loading Sound");
+      const { sound } = await Audio.Sound.createAsync(
+        require("../assets/audio.mp3")
+      );
+      sound.setVolumeAsync(0.4);
+      setSound(sound);
+
+      console.log("Playing Sound");
+      if (playingState) {
+        await sound.playAsync();
+      }
+    } else {
+      console.log("Not sure ", +playingState);
+    }
+  };
+
+  const resetStory = () => {
     setChat([]);
-    setIndex(0)
-  }
+    setIndex(0);
+  };
 
-  const displayNextChat = ()=>{
-    if(index < messages.length){
-      setChat(oldArray => [...oldArray, messages[index]]);
-      setIndex(index + 1)
+  const displayNextChat = () => {
+    if (index < messages.length) {
+      setChat((oldArray) => [...oldArray, messages[index]]);
+      setIndex(index + 1);
+    } else {
+      ToastAndroid.show("The end of this chapter !", ToastAndroid.SHORT);
+      console.log("The end of this chapter");
     }
-    else{
-      alert("The end of this chapter")
-    }
-  }
+  };
+
+  //  ALIYU Na MANI
   useEffect(() => {
+    console.log("is focus " + isFocused);
     data.chapters.map((chapt) => {
       if (chapt.title === title) {
         setChapter(chapt);
@@ -51,15 +86,35 @@ const Chat = ({ navigation, route }) => {
         console.log(chapt.title, title);
       }
     });
+    setPlayingState(true);
   }, []);
 
-  useEffect(()=>{
-    messages.map((m, index)=>{
-        setChat(oldArray => [...oldArray, m]);
-    })
-    console.log(chat)
-  }, [])
+  useEffect(() => {
+    messages.map((m, index) => {
+      setChat((oldArray) => [...oldArray, m]);
+    });
+    console.log(chat);
+    // Audio
+    console.log(playingState);
+    setAudio();
+    return sound
+      ? () => {
+          console.log("Unloading Sound");
+          sound.unloadAsync();
+        }
+      : undefined;
+  }, []);
 
+  const backAction = () => {
+          sound.stopAsync();
+          navigation.goBack();
+    return true;
+  };
+
+  const backHandler = BackHandler.addEventListener(
+    "hardwareBackPress",
+    backAction
+  );
   return (
     <View style={styles.screen}>
       <ImageBackground
@@ -69,8 +124,8 @@ const Chat = ({ navigation, route }) => {
       >
         <View style={styles.overlay}></View>
         <TouchableOpacity
-          style={{ zIndex: 40, marginTop: 10 }}
-          onPress={() => navigation.goBack()}
+          style={{ zIndex: 40, marginTop: 20 }}
+          onPress={() => backAction()}
         >
           <MaterialCommunityIcons name="arrow-left" color="#fff" size={30} />
         </TouchableOpacity>
@@ -107,39 +162,45 @@ const Chat = ({ navigation, route }) => {
       </ImageBackground>
       <ScrollView
         ref={scrollViewRef}
-        onContentSizeChange={() => scrollViewRef.current.scrollToEnd({ animated: true })}
-      style={{ flex: 1, padding: 15 }}>
+        onContentSizeChange={() =>
+          scrollViewRef.current.scrollToEnd({ animated: true })
+        }
+        style={{ flex: 1, padding: 15 }}
+      >
         <Text style={styles.time}>{chapter.time}</Text>
         <View></View>
-        {chat.map(
-          (m, index) => {
-            if (m.p === "2") {
-                return (
-                  <Second key={m.body} message={m.body} sender={m.sender} />
-                );
-              } else {
-                return (
-                  <First key={m.body} message={m.body} sender={m.sender} />
-                );
-              }
+        {chat.map((m, index) => {
+          if (m.p === "2") {
+            return <Second key={m.body} message={m.body} sender={m.sender} />;
+          } else {
+            return <First key={m.body} message={m.body} sender={m.sender} />;
           }
-            
-          
-        
-        
-        )}
+        })}
       </ScrollView>
       <View style={styles.control}>
-        <TouchableOpacity style={styles.controlBtn} onPress={()=> resetStory()}>
-        <MaterialCommunityIcons name="restart" color="#333" size={20} />
+        <TouchableOpacity
+          style={styles.controlBtn}
+          onPress={() => resetStory()}
+        >
+          <MaterialCommunityIcons name="restart" color="#333" size={20} />
         </TouchableOpacity>
 
-        <TouchableOpacity onPress={()=> displayNextChat()} style={[styles.controlBtn, {backgroundColor: "#2e4850"}]}>
-        <MaterialCommunityIcons name="skip-forward" color="#fff" size={20} />
+        <TouchableOpacity
+          onPress={() => displayNextChat()}
+          style={[styles.controlBtn, { backgroundColor: "#2e4850" }]}
+        >
+          <MaterialCommunityIcons name="skip-forward" color="#fff" size={20} />
         </TouchableOpacity>
 
-        <TouchableOpacity style={styles.controlBtn} onPress={()=> soundClick()}>
-        <MaterialCommunityIcons name={playing ? "volume-high": "volume-mute"} color="#333" size={20} />
+        <TouchableOpacity
+          style={styles.controlBtn}
+          onPress={() => soundClick()}
+        >
+          <MaterialCommunityIcons
+            name={playingState ? "volume-high" : "volume-mute"}
+            color="#333"
+            size={20}
+          />
         </TouchableOpacity>
       </View>
     </View>
@@ -176,19 +237,19 @@ const styles = StyleSheet.create({
     textAlign: "center",
     marginBottom: 10,
   },
-  control:{
+  control: {
     marginTop: 5,
-    alignItems: 'center',
+    alignItems: "center",
     justifyContent: "space-between",
-    flexDirection: 'row',
+    flexDirection: "row",
     paddingHorizontal: 10,
-    borderTopColor: '#efefef',
-    borderTopWidth: 1
+    borderTopColor: "#efefef",
+    borderTopWidth: 1,
   },
-  controlBtn:{
+  controlBtn: {
     flex: 1,
     padding: 6,
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
   },
 });
