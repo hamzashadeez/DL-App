@@ -7,7 +7,6 @@ import {
   TouchableOpacity,
   ScrollView,
   BackHandler,
-  Alert,
   ToastAndroid,
 } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
@@ -15,7 +14,7 @@ import { Second, First } from "../Components/Message";
 import { Audio } from "expo-av";
 import { Player } from "../Recoil/Play";
 import { useIsFocused } from "@react-navigation/native";
-import { useRecoilState, useRecoilValue } from "recoil";
+import { useRecoilState } from "recoil";
 
 const Chat = ({ navigation, route }) => {
   const { data, title } = route.params;
@@ -46,7 +45,7 @@ const Chat = ({ navigation, route }) => {
     if (playingState === true) {
       console.log("Loading Sound");
       const { sound } = await Audio.Sound.createAsync(
-        require("../assets/audio.mp3")
+        data.background_sound
       );
       sound.setVolumeAsync(0.4);
       setSound(sound);

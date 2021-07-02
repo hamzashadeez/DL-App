@@ -9,9 +9,9 @@ import {
   Alert,
 } from "react-native";
 import firebase from "firebase";
-import { auth, db } from "../Configs/firebase";
+import { db } from "../Configs/firebase";
 import {userState} from '../Recoil/Atoms'
-import { useRecoilState, useRecoilValue } from "recoil";  
+import { useRecoilState } from "recoil";  
 
 const Register = ({ navigation }) => {
   const [email, setEmail] = useState("");

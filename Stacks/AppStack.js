@@ -1,10 +1,9 @@
 import React, { useEffect } from "react";
-import { Text, View } from "react-native";
 import firebase from "firebase";
 import AuthStack from "../Stacks/AuthStack";
 import Flash from "../Screens/Flash";
 import MainStack from "../Stacks/MainStack";
-import { useRecoilState, useRecoilValue } from "recoil";
+import { useRecoilState } from "recoil";
 
 import { db } from "../Configs/firebase";
 

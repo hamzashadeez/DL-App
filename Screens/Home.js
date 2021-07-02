@@ -5,11 +5,10 @@ import HomeHeader from "../Components/HomeHeader";
 import { db } from "../Configs/firebase";
 import { userState } from "../Recoil/Atoms";
 import { Player } from "../Recoil/Play";
-import { useRecoilState, useRecoilValue } from "recoil";
+import { useRecoilState } from "recoil";
 
 const Home = ({ navigation }) => {
   const [books, setBooks] = useState([]);
-  const [user, setUser] = useRecoilState(userState);
   const [playerState, setPlayer] = useRecoilState(Player);
 
     const backAction = () => {

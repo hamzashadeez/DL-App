@@ -8,7 +8,6 @@ import {
   Image,
   ScrollView,
   Pressable,
-  Alert,
   BackHandler
 } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";

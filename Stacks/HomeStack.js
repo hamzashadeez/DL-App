@@ -1,6 +1,5 @@
 import React from "react";
 import { createStackNavigator } from "@react-navigation/stack";
-import BottomNav from "./BottomNav";
 import Home from "../Screens/Home";
 import BookDetail from "../Screens/BookDetail";
 import NoNetwork from "../Screens/NoNetwork";

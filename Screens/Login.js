@@ -9,12 +9,9 @@ import {
   Alert,
 } from "react-native";
 import firebase from "firebase";
-import { auth, db } from "../Configs/firebase";
+import { db } from "../Configs/firebase";
 
-import {
-  useRecoilState,
-  useRecoilValue,
-} from "recoil";
+import {useRecoilState} from "recoil";
 import { userState } from "../Recoil/Atoms";
 
 const Login = ({ navigation }) => {

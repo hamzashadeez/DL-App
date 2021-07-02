@@ -1,5 +1,5 @@
-import React, { useEffect } from "react";
-import { ImageBackground, Pressable, StyleSheet, Text, View } from "react-native";
+import React from "react";
+import { ImageBackground, Pressable, StyleSheet, Text } from "react-native";
 
 const Box = ({ book, navigation }) => {
   

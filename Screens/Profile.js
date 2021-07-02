@@ -18,9 +18,7 @@ const Profile = ({navigation}) => {
   const [user, setUser] = useRecoilState(userState);
   const [loading, setLoading] = useState(false);
   const [show, setShow] = useState(false);
-  console.log(user)
 
-  //   const {} = useContext(Data);
   const logout = async () => {
     setLoading(true);
     setTimeout(() => {

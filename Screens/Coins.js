@@ -1,7 +1,7 @@
 import React from "react";
 import { StyleSheet, Text, TouchableOpacity, View, BackHandler } from "react-native";
 import {  FontAwesome5 } from "@expo/vector-icons";
-import { useRecoilState, useRecoilValue } from "recoil";
+import { useRecoilState } from "recoil";
 import {userState} from '../Recoil/Atoms'
 
 const Coins = ({navigation}) => {
